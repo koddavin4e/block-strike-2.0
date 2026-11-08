@@ -1,3 +1,4 @@
+
 using UnityEngine;
 using TMPro;
 
@@ -48,6 +49,14 @@ public class ScoreManager : MonoBehaviour
             int multiplier = Mathf.Max(1, combo);
 
             score += clearedLines * 10 * multiplier;
+
+            if (AudioManager.Instance != null)
+            {
+                AudioManager.Instance.PlayClear();
+
+                if (clearedLines >= 2 || combo >= 2)
+                    AudioManager.Instance.PlayCombo();
+            }
         }
         else
         {
@@ -85,6 +94,9 @@ public class ScoreManager : MonoBehaviour
 
         IsGameOver = true;
 
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.PlayGameOver();
+
         if (finalScoreText != null)
             finalScoreText.text = score.ToString();
 
@@ -97,6 +109,9 @@ public class ScoreManager : MonoBehaviour
 
     public void RestartGame()
     {
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.PlayButtonClick();
+
         IsGameOver = false;
 
         score = 0;

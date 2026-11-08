@@ -25,8 +25,6 @@ public class PieceDrag : MonoBehaviour
         pieceView = GetComponent<PieceView>();
 
         startPosition = transform.position;
-
-        // Масштабируем только модель фигуры.
         transform.localScale = Vector3.one * previewScale;
     }
 
@@ -114,6 +112,9 @@ public class PieceDrag : MonoBehaviour
         dragOffset = transform.position - worldPosition;
 
         transform.localScale = Vector3.one;
+
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.PlayPickUp();
     }
 
     private void MovePiece(Vector2 screenPosition)
@@ -137,11 +138,17 @@ public class PieceDrag : MonoBehaviour
 
         if (placed)
         {
+            if (AudioManager.Instance != null)
+                AudioManager.Instance.PlayPlace();
+
             pieceSpawner.PieceUsed(this);
             Destroy(gameObject);
         }
         else
         {
+            if (AudioManager.Instance != null)
+                AudioManager.Instance.PlayInvalid();
+
             transform.position = startPosition;
             transform.localScale = Vector3.one * previewScale;
         }
